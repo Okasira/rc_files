@@ -1,0 +1,448 @@
+"============================================================================================
+"vim全体の設定
+"============================================================================================
+"-------------------------------------------------------------------
+"エンコード設定
+"vim内部表現文字コード
+"-------------------------------------------------------------------
+set encoding=utf-8
+
+"-------------------------------------------------------------------
+"ターミナルの文字コード
+"-------------------------------------------------------------------
+set termencoding=utf-8
+
+"-------------------------------------------------------------------
+"スクリプトの文字コード指定
+"-------------------------------------------------------------------
+scriptencoding utf-8
+
+"-------------------------------------------------------------------
+"変換すべき文字コードリスト
+"-------------------------------------------------------------------
+set fileencodings=ucs-bom,utf-8,iso-2022-jp,sjis,cp932,euc-jp,latain,default
+
+"-------------------------------------------------------------------
+"改行コードの設定
+"-------------------------------------------------------------------
+set fileformats=unix,dos,mac
+
+"-------------------------------------------------------------------
+"Windowsのクリップボードを使わない
+"-------------------------------------------------------------------
+set clipboard=exclude:.*
+
+"-------------------------------------------------------------------
+"バックアップファイルを作らない
+"-------------------------------------------------------------------
+set nobk
+
+"-------------------------------------------------------------------
+"記号を全角扱い
+"-------------------------------------------------------------------
+set ambiwidth=double
+
+"-------------------------------------------------------------------
+"端末タイトルの書き換え
+"-------------------------------------------------------------------
+set title
+
+"-------------------------------------------------------------------
+"バッファタブの常時表示
+"-------------------------------------------------------------------
+set showtabline=2
+
+"-------------------------------------------------------------------
+"シンタックスのカラー表示
+"-------------------------------------------------------------------
+syntax on
+
+"-------------------------------------------------------------------
+"色数指定
+"-------------------------------------------------------------------
+"set term=xterm-256color
+"set t_Co=256
+
+"-------------------------------------------------------------------
+"対応する括弧の表示
+"-------------------------------------------------------------------
+set showmatch
+
+"-------------------------------------------------------------------
+"行番号表示
+"-------------------------------------------------------------------
+set number
+
+"-------------------------------------------------------------------
+"ルーラ表示
+"-------------------------------------------------------------------
+set ruler
+
+"-------------------------------------------------------------------
+"ステータスライン表示設定
+"-------------------------------------------------------------------
+set laststatus=2
+set statusline=%y%{GetStatusEx()}\ %F%m%r\ %=%c,%l%11p%%
+set showcmd
+
+"-------------------------------------------------------------------
+"バックスペース設定
+"-------------------------------------------------------------------
+set bs=2
+
+"-------------------------------------------------------------------
+"タブ設定
+"タブ文字入力
+"-------------------------------------------------------------------
+set noexpandtab
+
+"-------------------------------------------------------------------
+"タブ表示幅
+"-------------------------------------------------------------------
+set tabstop=4
+
+"-------------------------------------------------------------------
+"タブ入力幅
+
+"-------------------------------------------------------------------
+set shiftwidth=4
+
+"-------------------------------------------------------------------
+"ソフトタブ
+"-------------------------------------------------------------------
+set softtabstop=0
+
+"-------------------------------------------------------------------
+"自動インデント
+"-------------------------------------------------------------------
+set autoindent
+
+"-------------------------------------------------------------------
+"行頭タブ設定
+"-------------------------------------------------------------------
+set smarttab
+
+"-------------------------------------------------------------------
+"新行の自動タブ
+"-------------------------------------------------------------------
+set smartindent
+
+"-------------------------------------------------------------------
+"インクリメンタルサーチは使わない
+"-------------------------------------------------------------------
+set noincsearch
+
+"-------------------------------------------------------------------
+"検索を先頭へループしない
+"-------------------------------------------------------------------
+set nowrapscan
+
+"-------------------------------------------------------------------
+"折りたたみ設定
+"-------------------------------------------------------------------
+set foldmethod=marker
+
+"-------------------------------------------------------------------
+"vim標準 前方、後方補完設定
+"-------------------------------------------------------------------
+nnoremap <silent><ESC>n :<C-u>tabn<CR>
+nnoremap <silent><ESC>p :<C-u>tabp<CR>
+nnoremap <silent><ESC>N :<C-u>tabnew<CR>
+nnoremap <silent><ESC>c :<C-u>tabclose<CR>
+
+"-------------------------------------------------------------------
+"Qキー単体でExモード切り替えはやらない
+"-------------------------------------------------------------------
+nnoremap Q  <NOP>
+
+"-------------------------------------------------------------------
+"全角スペース表示
+"-------------------------------------------------------------------
+highlight   ZenkakuSpace	cterm=underline ctermfg=lightblue   guibg=black
+match   ZenkakuSpace	/   /
+
+"-------------------------------------------------------------------
+"QuickFixトグルキーマップ
+"-------------------------------------------------------------------
+function! QuickFixToggle()
+	let _ = winnr( '$' )
+	cclose
+	if _ == winnr( '$' )
+		cwindow
+	endif
+endfunction
+nmap <silent><F12>  :call QuickFixToggle()<CR>
+nmap <silent><C-W>, :call QuickFixToggle()<CR>
+
+"-------------------------------------------------------------------
+"ステータスライン用ファイルフォーマット等取得処理
+"-------------------------------------------------------------------
+function! GetStatusEx()
+	let str = ''
+	let str = '[' . str . '' . &fileformat . ']'
+	if ( has('multi_byte') && &fileencoding != '' )
+		let str = '[' . &fileencoding . ':' . str
+	endif
+	return str
+endfunction
+
+"-------------------------------------------------------------------
+"vimgrep結果 QuickFix表示
+"-------------------------------------------------------------------
+autocmd QuickfixCmdPost vimgrep cw
+
+"============================================================================================
+"プラグイン管理
+"============================================================================================
+filetype off
+
+if has('vim_starting')
+	set rtp+=~/.bundle/neobundle.vim/
+endif
+call neobundle#rc(expand('~/.bundle/'))
+ 
+NeoBundle 'abudden/TagHighlight'
+NeoBundle 'dannyob/quickfixstatus'
+NeoBundle 'fuenor/qfixgrep'
+NeoBundle 'jceb/vim-hier'
+NeoBundle 'nathanaelkane/vim-indent-guides'
+NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'Shougo/neosnippet'
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'closetag.vim'
+NeoBundle 'matrix.vim--Yang'
+NeoBundle 'YankRing.vim'
+NeoBundle 'EnhCommentify.vim'
+NeoBundle 'skammer/vim-css-color'
+NeoBundle 't9md/vim-quickhl'
+NeoBundle 'tyru/restart.vim'
+
+"-------------------------------------------------------------------
+" カラースキーム
+"-------------------------------------------------------------------
+NeoBundle 'xoria256.vim'
+NeoBundle 'tomasr/molokai'
+NeoBundle 'nanotech/jellybeans.vim'
+
+"-------------------------------------------------------------------
+" SyntaxCheck
+"-------------------------------------------------------------------
+NeoBundle "thinca/vim-quickrun"
+NeoBundle "Shougo/vimproc"
+NeoBundle "osyo-manga/shabadou.vim"
+NeoBundle "osyo-manga/vim-watchdogs"
+
+
+filetype plugin on
+filetype indent on
+
+"-------------------------------------------------------------------
+"検索ウィンドウ非表示(表示する場合はmenuone,preview)
+"-------------------------------------------------------------------
+set completeopt=menuone
+
+"-------------------------------------------------------------------
+"neocompletecacheの設定
+"neocompletecache有効
+"-------------------------------------------------------------------
+let g:neocomplcache_enable_at_startup = 1
+
+"-------------------------------------------------------------------
+"neocompletecache SmartCase有効
+"-------------------------------------------------------------------
+let g:neocomplcache_enable_smart_case = 1
+
+"-------------------------------------------------------------------
+"CamelCase補完
+"-------------------------------------------------------------------
+let g:neocomplcache_enable_camel_case_completion = 1
+
+"-------------------------------------------------------------------
+"UnderBar補完
+"-------------------------------------------------------------------
+let g:neocomplcache_enable_underbar_completion = 0
+
+"-------------------------------------------------------------------
+"最初の補完を自動選択
+"-------------------------------------------------------------------
+let g:neocomplcache_enable_auto_select = 0
+
+"-------------------------------------------------------------------
+"ファイル名補完のvim内蔵との入れ替え
+"-------------------------------------------------------------------
+inoremap <expr><C-x><C-f>  neocomplcache#manual_filename_complete()
+
+"-------------------------------------------------------------------
+"ファイル名補完のvim内蔵との入れ替え
+"-------------------------------------------------------------------
+inoremap <expr><C-x><C-f>  neocomplcache#manual_filename_complete()
+
+"-------------------------------------------------------------------
+"補完の確定
+"-------------------------------------------------------------------
+inoremap <expr><C-y> neocomplcache#close_popup()
+inoremap <expr><CR>  pumvisible() ? neocomplcache#close_popup() : "\<CR>"
+
+"-------------------------------------------------------------------
+"補完のアンドゥ
+"-------------------------------------------------------------------
+inoremap <expr><C-u> neocomplcache#undo_completion()
+
+"-------------------------------------------------------------------
+"シェルのような補完
+"-------------------------------------------------------------------
+imap <expr><C-l> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+
+"-------------------------------------------------------------------
+"Ctrl+H,BackSpaceでのポップアップを確実に閉じる
+"-------------------------------------------------------------------
+inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+
+"-------------------------------------------------------------------
+"ポップアップを閉じる
+"-------------------------------------------------------------------
+inoremap <expr><C-e> neocomplcache#cancel_popup()
+inoremap <expr><ESC> pumvisible() ? neocomplcache#cancel_popup() : "\<ESC>"
+
+"-------------------------------------------------------------------
+"オムニ補完の有効化
+"------------------------------------------------------------------
+augroup OmniCompleteGroup
+autocmd FileType c setlocal				omnifunc=ccomplete#Complete
+autocmd FileType css setlocal			omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal	omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal	omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal		omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal			omnifunc=xmlcomplete#CompleteTags
+augroup END
+
+"-------------------------------------------------------------------
+"オムニ補完のトリガパターン
+"-------------------------------------------------------------------
+if !exists('g:neocomplcache_omni_patterns')
+	let g:neocomplcache_omni_patterns = {}
+endif
+let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
+let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+
+"-------------------------------------------------------------------
+"C/C++相互補完
+"-------------------------------------------------------------------
+if !exists('g:neocomplcache_same_filetype_lists')
+    let g:neocomplcache_same_filetype_lists = {}
+endif
+let g:neocomplcache_same_filetype_lists.c   = 'cpp,cc'
+let g:neocomplcache_same_filetype_lists.cpp = 'c,cc'
+
+"-------------------------------------------------------------------
+"neosnippetの設定
+"スニペット置き場
+"-------------------------------------------------------------------
+if !exists('g:neosnippet#snippets_directory')
+    let g:neosnippet#snippets_directory=""
+endif
+let g:neosnippet#snippets_directory= '~/.vim/snippets'
+
+"-------------------------------------------------------------------
+"スニペットのキー割り当て
+"スニペットの展開
+"-------------------------------------------------------------------
+imap <C-j> <Plug>(neosnippet_expand)
+smap <C-j> <Plug>(neosnippet_expand)
+
+"-------------------------------------------------------------------
+"" Restart.vimの設定
+"-------------------------------------------------------------------
+let g:restart_sessionoptions = 'blank,buffers,curdir,folds,help,localoptions,resize,tabpages,winsize'
+
+"-------------------------------------------------------------------
+"QFixGrep設定
+"-------------------------------------------------------------------
+let QFix_UseLocationList = 0
+let mygrepprg = 'grep'
+let MyGrep_ShellEncoding = 'utf-8'
+"ダメ文字対策
+let MyGrep_Damemoji = 2
+
+"-------------------------------------------------------------------
+"Grepの起点をカレントに設定
+"-------------------------------------------------------------------
+let MyGrep_CurrentDirMode = 1
+
+"-------------------------------------------------------------------
+"QuickFixウィンドウ
+"-------------------------------------------------------------------
+let QFix_PreviewEnable = 0
+let QFix_Height = 10
+let QFix_CopenCmd = 'botright'
+let QFix_PreviewOpenCmd = 'botright'
+
+"-------------------------------------------------------------------
+"QuickFixStatus有効化
+"-------------------------------------------------------------------
+"QuickfixStatusEnable
+
+"-------------------------------------------------------------------
+"vim-indent-guidの設定
+"-------------------------------------------------------------------
+"インデントサイズ
+let g:indent_guides_guide_size = 4
+"gvim以外なのでAutoColorはOFF
+let g:indent_guides_auto_colors = 0
+"色設定
+augroup IndentGuidColors
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd	ctermbg=237	guibg=#333333
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven	ctermbg=236	guibg=#262626
+augroup END
+"vim-indent-guidの開始
+let g:indent_guides_enable_on_vim_startup = 1
+
+"-------------------------------------------------------------------
+"vim-css-colorの設定(500ms)
+"-------------------------------------------------------------------
+let g:cssColorVimDoNotMessMyUpdatetime = 5
+
+"-------------------------------------------------------------------
+"quickhlの設定
+"-------------------------------------------------------------------
+nmap <Space>m <Plug>(quickhl-toggle)
+xmap <Space>m <Plug>(quickhl-toggle)
+nmap <Space>M <Plug>(quickhl-reset)
+xmap <Space>M <Plug>(quickhl-reset)
+nmap <Space>j <Plug>(quickhl-match)
+
+"-------------------------------------------------------------------
+"色設定
+"NeoBundleでインストールしたカラースキームがアルので最後に設定
+"-------------------------------------------------------------------
+"colorscheme default
+"colorscheme xoria256
+"colorscheme jellybeans
+colorscheme molokai
+
+"-------------------------------------------------------------------
+"カレント行のハイライト表示
+"-------------------------------------------------------------------
+set cursorline
+highlight CursorLine cterm=underline ctermbg=Blue gui=underline guibg=Blue
+
+"-------------------------------------------------------------------
+"vim-hier QuickFixカラー
+"QFError,QFWarning,QFInfo,LocError,LocWarning,LocInfoはクリアするときに使うので直接使用不可
+"-------------------------------------------------------------------
+execute "highlight qf_highlight_error term=underline cterm=underline gui=undercurl ctermbg=darkred     guifg=fg guibg=bg guisp=darkred"
+execute "highlight qf_highlight_warn  term=underline cterm=underline gui=undercurl ctermbg=darkmagenta guifg=fg guibg=bg guisp=darkmagenta"
+execute "highlight qf_highlight_info  term=underline cterm=underline gui=undercurl ctermbg=lightblue   guifg=fg guibg=bg guisp=lightblue"
+let g:hier_highlight_group_qf="qf_highlight_error"
+let g:hier_highlight_group_qfw="qf_highlight_warn"
+let g:hier_highlight_group_qfi="qf_highlight_info"
+let g:hier_highlight_group_loc="qf_highlight_error"
+let g:hier_highlight_group_locw="qf_highlight_warn"
+let g:hier_highlight_group_loci="qf_highlight_info"
+
+"-------------------------------------------------------------------
+"vim-hier設定
+"-------------------------------------------------------------------
+let g:hier_enabled = 1
+

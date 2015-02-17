@@ -1,0 +1,41 @@
+"--------------------------------
+" 色変更
+"--------------------------------
+colorscheme molokai
+
+"--------------------------------
+" フォント
+"--------------------------------
+set guifont=Ricty:h12:cSHIFTJIS
+
+"--------------------------------
+" 全画面表示
+"--------------------------------
+autocmd GUIEnter * simalt ~X
+
+"-------------------------------------------------------------------
+"カレント行のハイライト表示
+"-------------------------------------------------------------------
+set cursorline
+highlight CursorLine gui=underline	guibg=mediumblue
+
+"-------------------------------------------------------------------
+"vim-hier QuickFixカラー
+"QFError,QFWarning,QFInfo,LocError,LocWarning,LocInfoはクリアするときに使うので直接使用不可
+"-------------------------------------------------------------------
+let g:hier_enabled = 0
+execute "highlight qf_highlight_error gui=undercurl		guisp=red			guibg=darkblue"
+execute "highlight qf_highlight_warn  gui=undercurl		guisp=magenta		guibg=darkblue"
+execute "highlight qf_highlight_info  gui=undercurl		guisp=lightblue		guibg=darkblue"
+let g:hier_highlight_group_qf="qf_highlight_error"
+let g:hier_highlight_group_qfw="qf_highlight_warn"
+let g:hier_highlight_group_qfi="qf_highlight_info"
+let g:hier_highlight_group_loc="qf_highlight_error"
+let g:hier_highlight_group_locw="qf_highlight_warn"
+let g:hier_highlight_group_loci="qf_highlight_info"
+
+"-------------------------------------------------------------------
+"vim-hier設定
+"-------------------------------------------------------------------
+let g:hier_enabled = 1
+
